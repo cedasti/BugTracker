@@ -1,0 +1,162 @@
+﻿@model IEnumerable<BugTracker.Models.Bugs>
+
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1 class="text-white">Bugs</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary"> Create New </a>
+</p>
+<form asp-action="ShowSearchResults">
+    <div class="form-group">
+        <label for="SearchPhrase" class="control-label"></label>
+        <input name="SearchPhrase" class="form-control" />
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Search" class="btn btn-primary" />
+    </div>
+</form>
+@using (Html.BeginForm("Index", "Bugs", FormMethod.Get))
+{
+
+    <style type="text/css">
+        .overflow-ellipsis {
+            width: 20px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .table {
+            table-layout: fixed;
+            border: 1px solid;
+            width:1500px
+        }
+        .circle {
+            width: 10px;
+            height: 5px;
+            line-height: 45px;
+            border-radius: 50%;
+            font-size: 15px;
+            text-align: center;
+        }
+
+
+
+        .buttoni {
+            font-size: 13px;
+            letter-spacing: 1px;
+            border: 2px solid rgba(108, 89, 179, 0.75);
+            border-radius: 40px;
+        }
+
+    </style>
+
+    <table class="table">
+        <thead class="text-white">
+            <tr class="bg-dark">
+                <th>
+                    @Html.ActionLink("Tickets", "Index", new
+                    {
+                        SortOrder = ViewBag.Tickets,
+                   SelectedTickets = ViewBag.SelectedTickets,
+                   SelectedDescription = ViewBag.SelectecDescription,
+                   SelectedPriority = ViewBag.SelectedPriority,
+                   SelectedDueDate = ViewBag.SelectedDueDate,
+                    })
+                </th>
+                <th class="col-md-5">
+                    @Html.ActionLink("Description", "Index", new
+                    {
+                   SortOrder = ViewBag.Description,
+                   SelectedDescription = ViewBag.SelectecDescription,
+                   SelectedTickets = ViewBag.SelectedTickets,
+                   SelectedPriority = ViewBag.SelectedPriority,
+                   SelectedDueDate = ViewBag.SelectedDueDate
+                    })
+                </th>
+                <th class="col-md-1">
+                    @Html.ActionLink("Priority", "Index", new
+                    {
+                   SortOrder = ViewBag.Priority,
+                   SelectedDescription = ViewBag.SelectecDescription,
+                   SelectedTickets = ViewBag.SelectedTickets,
+                   SelectedPriority = ViewBag.SelectedPriority,
+                   SelectedDueDate = ViewBag.SelectedDueDate
+                    })
+                </th>
+                <th class="col-md-1">
+                    @Html.ActionLink("Due Date", "Index", new
+                    {
+                        SortOrder = ViewBag.DueDate,
+                   SelectedTickets = ViewBag.SelectedTickets,
+                   SelectedDescription = ViewBag.SelectecDescription,
+                   SelectedPriority = ViewBag.SelectedPriority,
+                   SelectedDueDate = ViewBag.SelectedDueDate
+                    })
+                </th>
+                <th>
+                </th>
+            </tr>
+            <tr class="bg-dark">
+                <th>
+                    @Html.DropDownList("SelectedTickets",
+                    new SelectList(ViewBag.UniqueTickets, "Value", "Text", "ViewBag.SelectedTickets"),
+                    "All", new { onchange = "form.submit();" })
+                </th>
+                <th>
+                </th>
+                <th>
+                    @Html.DropDownList("SelectedPriority",
+                    new SelectList(ViewBag.UniquePriority, "Value", "Text", "ViewBag.SelectedPriority"),
+                    "All", new { onchange = "form.submit();" })
+                </th>
+                <th>
+                    @Html.DropDownList("SelectedDueDate",
+                    new SelectList(ViewBag.UniqueDueDate, "Value", "Text", "ViewBag.SelectedDueDate"),
+                    "All", new { onchange = "form.submit();" })
+                </th>
+                <th>
+                </th>
+            </tr>
+        </thead>
+        <tbody class="text-white">
+
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td class="overflow-ellipsis">
+                    @Html.DisplayFor(modelItem => item.Tickets)
+                </td>
+                <td class="overflow-ellipsis">
+                    @Html.Raw(item.Description)
+                </td>
+                <td>
+                    <a class=" btn @(item.Priority == "Immediate" ? "red" :
+                                 item.Priority == "Urgent" ? "chocolate" :
+                                 item.Priority == "Medium" ? "gold" :
+                                 item.Priority == "Low" ? "yellow" :
+                                 item.Priority == "Very low" ? "olive" :
+                                 item.Priority == "Closed" ? "green" : "")">
+                    @Html.DisplayFor(modelItem => item.Priority)
+                    </a>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DueDate)
+                </td>
+                <td class="btn-group mx-2">
+                    <a asp-controller="Bugs" asp-route-id="@item.Id" asp-action="Edit" class="btn btn-primary">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    <a asp-controller="Bugs" asp-route-id="@item.Id" asp-action="Details" class="btn btn-primary">Details</a>
+                    <a asp-controller="Bugs" asp-route-Id="@item.Id" asp-action="Delete" class="btn btn-danger">
+                        <i class="fas fa-trash"></i>
+                    </a>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+}
