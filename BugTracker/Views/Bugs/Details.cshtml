@@ -18,7 +18,13 @@
                 <hr />
                 <dl class="row">
                     <dt class="col-sm-2">
-                        @Html.DisplayNameFor(model => model.Tickets)
+                        Project
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Projects)
+                    </dd>
+                    <dt class="col-sm-2">
+                        Ticket
                     </dt>
                     <dd class="col-sm-10">
                         @Html.DisplayFor(model => model.Tickets)
@@ -33,6 +39,7 @@
                         @Html.DisplayNameFor(model => model.Priority)
                     </dt>
 
+
                     {
                     <dd class="btn text-white @(Model.Priority == "Immediate" ? "red" :
                      Model.Priority == "Urgent" ? "chocolate" :
@@ -43,10 +50,13 @@
                         @Html.DisplayFor(model => model.Priority)
                     </dd>
                     <dt class="col-sm-10">
-                        Time Created
+                        Created
                     </dt>
                     <dd class="col-sm-10">
                         @Html.DisplayFor(model => model.TimeCreated)
+                    </dd>                   
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Creator)
                     </dd>
                     <dt class="col-sm-10">
                         Due Date
@@ -84,5 +94,4 @@
                     <i class="fas fa-trash"></i>
                 </a>
             </div>
-        <!---->
     

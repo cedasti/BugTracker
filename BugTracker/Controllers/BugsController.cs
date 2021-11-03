@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using BugTracker.Data;
 using BugTracker.Models;
 using Microsoft.AspNetCore.Authorization;
-using System.Drawing;
+
 
 namespace BugTracker.Controllers
 {
@@ -22,20 +22,26 @@ namespace BugTracker.Controllers
         }
 
         // GET: Bugs
-        public async Task<IActionResult> Index(string SortOrder, string SelectedTickets, string SelectedDescription, string SelectedPriority, string SelectedDueDate)
+        public async Task<IActionResult> Index(string SelectedProjects, string SortOrder, string SelectedTickets, string SelectedDescription, string SelectedPriority, string SelectedDueDate)
 
         {
-            ViewBag.Tickets = String.IsNullOrEmpty(SortOrder) ? "Tickets_desc" : "";
+            ViewBag.Projects = String.IsNullOrEmpty(SortOrder) ? "Projects_desc" : "";
+            ViewBag.Tickets = SortOrder == "Tickets" ? "Tickets_desc" : "Tickets";
             ViewBag.Description = SortOrder == "Description" ? "Description_desc" : "Description";
             ViewBag.Priority = SortOrder == "Priority" ? "Priority_desc" : "Priority";
             ViewBag.DueDate = SortOrder == "DueDate" ? "DueDate_desc" : "DueDate";
+
             var rawData = (from s in _context.Bugs
                            select s).ToList();
             var emp = from s in rawData
                       select s;
 
+            if (!String.IsNullOrEmpty(SelectedProjects))
+            {
+                emp = emp.Where(s => s.Projects.Trim().Equals(SelectedProjects.Trim()));
+            }
 
-            if(!String.IsNullOrEmpty(SelectedTickets))
+            if (!String.IsNullOrEmpty(SelectedTickets))
             {
                 emp = emp.Where(s => s.Tickets.Trim().Equals(SelectedTickets.Trim()));
             }
@@ -54,6 +60,13 @@ namespace BugTracker.Controllers
             {
                 emp = emp.Where(s => s.DueDate.ToString().Trim().Equals(SelectedDueDate.Trim()));
             }
+
+            var UniqueProjects = from s in emp
+                                group s by s.Projects into newGroup
+                                where newGroup.Key != null
+                                orderby newGroup.Key
+                                select new { Projects = newGroup.Key };
+            ViewBag.UniqueProjects = UniqueProjects.Select(m => new SelectListItem { Value = m.Projects, Text = m.Projects }).ToList();
 
             var UniqueTickets = from s in emp
                                 group s by s.Tickets into newGroup
@@ -81,7 +94,8 @@ namespace BugTracker.Controllers
                                  orderby newGroup.Key
                                  select new { DueDate = newGroup.Key };
             ViewBag.UniqueDueDate = UniqueDueDate.Select(m => new SelectListItem { Value = m.DueDate.ToString(), Text = m.DueDate.ToString() }).ToList();
-            
+
+            ViewBag.SelectedProjects = SelectedProjects;
             ViewBag.SelectedTickets = SelectedTickets;
             ViewBag.SelectedPriority = SelectedPriority;
             ViewBag.SelectedTickets = SelectedDescription;
@@ -90,6 +104,14 @@ namespace BugTracker.Controllers
 
             switch (SortOrder)
             {
+                case "Projects_desc":
+                    emp = emp.OrderByDescending(s => s.Projects);
+                    break;
+
+                case "Projects":
+                    emp = emp.OrderBy(s => s.Projects);
+                    break;
+
                 case "Tickets_desc":
                     emp = emp.OrderByDescending(s => s.Tickets);
                     break;
@@ -123,7 +145,7 @@ namespace BugTracker.Controllers
                     break;
 
                 default:
-                    emp = emp.OrderByDescending(s => s.DueDate);
+                    emp = emp.OrderByDescending(s => s.Priority);
                     break;
             }
 
@@ -177,8 +199,26 @@ namespace BugTracker.Controllers
         // GET: Bugs/Create
 
         [Authorize]
-        public IActionResult Create()
+        public IActionResult Create(string Selected1Projects)
         {
+            var rawData = (from s in _context.Bugs
+                           select s).ToList();
+            var amp = from s in rawData
+                      select s;
+
+            if (!String.IsNullOrEmpty(Selected1Projects))
+            {
+                amp = amp.Where(s => s.Projects.Trim().Equals(Selected1Projects.Trim()));
+            }
+
+            var Unique1Projects = from s in amp
+                                 group s by s.Projects into newGroup
+                                 where newGroup.Key != null
+                                 orderby newGroup.Key
+                                 select new { Projects = newGroup.Key };
+            ViewBag.Unique1Projects = Unique1Projects.Select(m => new SelectListItem { Value = m.Projects, Text = m.Projects }).ToList();
+            ViewBag.Selected1Projects = Selected1Projects;
+                   
             return View();
         }
 
@@ -188,12 +228,11 @@ namespace BugTracker.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Tickets,Description,Priority,DueDate,TimeCreated,ClosedDate,Resolved")] Bugs bugs)
+        public async Task<IActionResult> Create([Bind("Id,Projects,Unique1Projects,Tickets,Description,Priority,DueDate,TimeCreated,ClosedDate,Resolved,Creator")] Bugs bugs)
         {
 
-
             if (ModelState.IsValid)
-            {
+            {         
                 _context.Add(bugs);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -203,8 +242,27 @@ namespace BugTracker.Controllers
 
         // GET: Bugs/Edit/5
         [Authorize]
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(string Selected2Projects, int? id)
         {
+
+            var rawData = (from s in _context.Bugs
+                           select s).ToList();
+            var amp = from s in rawData
+                      select s;
+
+            if (!String.IsNullOrEmpty(Selected2Projects))
+            {
+                amp = amp.Where(s => s.Projects.Trim().Equals(Selected2Projects.Trim()));
+            }
+
+            var Unique1Projects = from s in amp
+                                  group s by s.Projects into newGroup
+                                  where newGroup.Key != null
+                                  orderby newGroup.Key
+                                  select new { Projects = newGroup.Key };
+            ViewBag.Unique2Projects = Unique1Projects.Select(m => new SelectListItem { Value = m.Projects, Text = m.Projects }).ToList();
+            ViewBag.Selected2Projects = Selected2Projects;
+
             if (id == null)
             {
                 return NotFound();
@@ -224,7 +282,7 @@ namespace BugTracker.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Tickets,Description,Priority,DueDate,TimeCreated,ClosedDate,Resolved")] Bugs bugs)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Projects,Tickets,Description,Priority,DueDate,TimeCreated,ClosedDate,Resolved,Creator")] Bugs bugs)
         {
             if (id != bugs.Id)
             {

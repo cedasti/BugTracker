@@ -6,19 +6,10 @@
 }
 
 <h1 class="text-white">Bugs</h1>
-
 <p>
     <a asp-action="Create" class="btn btn-primary"> Create New </a>
 </p>
-<form asp-action="ShowSearchResults">
-    <div class="form-group">
-        <label for="SearchPhrase" class="control-label"></label>
-        <input name="SearchPhrase" class="form-control" />
-    </div>
-    <div class="form-group">
-        <input type="submit" value="Search" class="btn btn-primary" />
-    </div>
-</form>
+
 @using (Html.BeginForm("Index", "Bugs", FormMethod.Get))
 {
 
@@ -43,19 +34,24 @@
             text-align: center;
         }
 
-
-
-        .buttoni {
-            font-size: 13px;
-            letter-spacing: 1px;
-            border: 2px solid rgba(108, 89, 179, 0.75);
-            border-radius: 40px;
-        }
-
     </style>
 
-    <table class="table">
+    <table class="table table-dark table-striped">
         <thead class="text-white">
+            <tr>
+                <th class="text-white">
+                    Projects
+                </th>
+            </tr>
+            <tr>
+                <th>
+                    @Html.DropDownList("SelectedProjects",
+                    new SelectList(ViewBag.UniqueProjects, "Value", "Text", "ViewBag.SelectedProjects"),
+                    "All", new { onchange = "form.submit();" })
+                </th>
+            </tr>
+        </thead>
+        <tbody class="text-white">
             <tr class="bg-dark">
                 <th>
                     @Html.ActionLink("Tickets", "Index", new
@@ -77,7 +73,7 @@
                    SelectedDueDate = ViewBag.SelectedDueDate
                     })
                 </th>
-                <th class="col-md-1">
+                <th class="col-sm-1">
                     @Html.ActionLink("Priority", "Index", new
                     {
                    SortOrder = ViewBag.Priority,
@@ -121,12 +117,10 @@
                 <th>
                 </th>
             </tr>
-        </thead>
-        <tbody class="text-white">
 
             @foreach (var item in Model)
             {
-            <tr>
+            <tr class="table-white">
                 <td class="overflow-ellipsis">
                     @Html.DisplayFor(modelItem => item.Tickets)
                 </td>

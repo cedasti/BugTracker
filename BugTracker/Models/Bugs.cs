@@ -12,7 +12,10 @@ namespace BugTracker.Models
     {
         [Required]
         public int Id { get; set; }
-        
+
+        [Required]
+        public string Projects { get; set; }
+
         [Required]
         [MaxLength(50)]
         public string Tickets { get; set; }
@@ -20,7 +23,6 @@ namespace BugTracker.Models
         [Required]
         public string Description { get; set; }
 
-        
         public string Resolved { get; set; }
 
         [Required]
@@ -29,6 +31,8 @@ namespace BugTracker.Models
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy HH:mm}")]
         public DateTime DueDate { get; set; }
         public string ClosedDate { get; set; }
+       
+        public string Creator { get; set; }
 
 
         public string TimeCreated { get; set; }

@@ -4,61 +4,80 @@
     ViewData["Title"] = "Create";
 }
 
+
 <h1 class="text-white">Create</h1>
 
 <h4 class="text-white">Bugs</h4>
 <hr />
 <div class="row">
     <div class="col-md-5">
-        <form class="text-white" asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Tickets" class="control-label text-white"></label>
-                <input asp-for="Tickets" class="form-control" />
-                <span asp-validation-for="Tickets" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label text-white"></label>
-                <textarea asp-for="Description" class="form-control" rows="5"></textarea>
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Priority" class="control-label text-white"></label>
+        @using (Html.BeginForm("Create", "Bugs", FormMethod.Post))
+        {  <form class="text-white" asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                
+                <div class="form-group">
+                    <label class="control-label text-white">New Project</label>
+                    <input asp-for="Projects" class="form-control" />
+                    <label class="control-label text-white">Select Project</label>
+                    @Html.DropDownListFor(model => model.Projects,
+                    new SelectList(ViewBag.Unique1Projects, "Value", "Text"), "New Project")
+                    <span asp-validation-for="Projects" class="text-danger"></span>
 
-                <select id="select1" asp-for="Priority">
-                    <option selected disabled>Select</option>
-                    <option>Immediate</option>
-                    <option>Urgent</option>
-                    <option>Medium</option>
-                    <option>Low</option>
-                    <option>Very low</option>
-                    <option>Closed</option>
-                </select>
+                </div>
+                <div class="form-group">
+                    <label class="control-label text-white">Ticket</label>
+                    <input asp-for="Tickets" class="form-control" />
+                    <span asp-validation-for="Tickets" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Description" class="control-label text-white"></label>
+                    <textarea asp-for="Description" class="form-control" rows="5"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Priority" class="control-label text-white"></label>
 
-                <span asp-validation-for="Priority" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label class="control-label text-white">Time Created</label>
-                <select id="select1" asp-for="TimeCreated">
-                    <option>@DateTime.Now</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label class="control-label text-white">Due date</label>
-                <input asp-for="DueDate" class="form-control" />
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+                    <select id="select1" asp-for="Priority">
+                        <option selected disabled>Select</option>
+                        <option>Immediate</option>
+                        <option>Urgent</option>
+                        <option>Medium</option>
+                        <option>Low</option>
+                        <option>Very low</option>
+                        <option>Closed</option>
+                    </select>
+
+                    <span asp-validation-for="Priority" class="text-danger"></span>
+                </div>
+                <div style="display:none "class="form-group">
+                    <label class="control-label text-white">Time Created</label>
+                    <select id="select1" asp-for="TimeCreated">
+                        <option>@DateTime.Now</option>
+                    </select>
+                </div>
+                <div style="display:none" class="form-group">
+                    <label class="control-label text-white">Creator</label>
+                    <select id="select2" asp-for="Creator">
+                        <option>@User.Identity.Name</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="control-label text-white">Due date</label>
+                    <input asp-for="DueDate" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+                <div class="form-group">
+                    <a asp-action="Index" class="btn btn-primary">
+                        <i class="fas fa-long-arrow-alt-left"></i> <!--BackToList-->
+                    </a>
+                </div>
+            </form>
+        }
     </div>
 </div>
 
-<div class="row">
-    <a asp-action="Index" class="btn btn-primary mx-2">
-        <i class="fas fa-long-arrow-alt-left"></i> <!--BackToList-->
-    </a>
-</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
