@@ -22,14 +22,14 @@ namespace BugTracker.Controllers
         }
 
         // GET: Bugs
-        public async Task<IActionResult> Index(string SelectedProjects, string SortOrder, string SelectedTickets, string SelectedDescription, string SelectedPriority, string SelectedDueDate)
+        public async Task<IActionResult> Index(string SelectedProjects, string SortOrder, string SelectedTickets, string SelectedDescription, string SelectedPriority, string SelectedCreateClosedDate)
 
         {
             ViewBag.Projects = String.IsNullOrEmpty(SortOrder) ? "Projects_desc" : "";
             ViewBag.Tickets = SortOrder == "Tickets" ? "Tickets_desc" : "Tickets";
             ViewBag.Description = SortOrder == "Description" ? "Description_desc" : "Description";
             ViewBag.Priority = SortOrder == "Priority" ? "Priority_desc" : "Priority";
-            ViewBag.DueDate = SortOrder == "DueDate" ? "DueDate_desc" : "DueDate";
+            ViewBag.CreateClosedDate = SortOrder == "CreateClosedDate" ? "CreateClosedDate_desc" : "CreateClosedDate";
 
             var rawData = (from s in _context.Bugs
                            select s).ToList();
@@ -56,9 +56,9 @@ namespace BugTracker.Controllers
                 emp = emp.Where(s => s.Description.Trim().Equals(SelectedDescription.Trim()));
             }
 
-            if (!String.IsNullOrEmpty(SelectedDueDate))
+            if (!String.IsNullOrEmpty(SelectedCreateClosedDate))
             {
-                emp = emp.Where(s => s.DueDate.ToString().Trim().Equals(SelectedDueDate.Trim()));
+                emp = emp.Where(s => s.TimeCreated.ToString().Trim().Equals(SelectedCreateClosedDate.Trim()));
             }
 
             var UniqueProjects = from s in emp
@@ -99,7 +99,7 @@ namespace BugTracker.Controllers
             ViewBag.SelectedTickets = SelectedTickets;
             ViewBag.SelectedPriority = SelectedPriority;
             ViewBag.SelectedTickets = SelectedDescription;
-            ViewBag.SelectedDueDate = SelectedDueDate;
+            ViewBag.SelectedCreateClosedDate = SelectedCreateClosedDate;
 
 
             switch (SortOrder)
@@ -136,12 +136,12 @@ namespace BugTracker.Controllers
                     emp = emp.OrderBy(s => s.Priority);
                     break;
 
-                case "DueDate_desc":
-                    emp = emp.OrderByDescending(s => s.DueDate);
+                case "CreateClosedDate_desc":
+                    emp = emp.OrderByDescending(s => s.TimeCreated);
                     break;
 
-                case "DueDate":
-                    emp = emp.OrderBy(s => s.DueDate);
+                case "CreateClosedDate":
+                    emp = emp.OrderBy(s => s.TimeCreated);
                     break;
 
                 default:

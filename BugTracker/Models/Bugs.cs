@@ -14,10 +14,11 @@ namespace BugTracker.Models
         public int Id { get; set; }
 
         [Required]
+        [MaxLength(35)]
         public string Projects { get; set; }
 
         [Required]
-        [MaxLength(50)]
+        [MaxLength(35)]
         public string Tickets { get; set; }
 
         [Required]

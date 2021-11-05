@@ -54,25 +54,31 @@
                     </dt>
                     <dd class="col-sm-10">
                         @Html.DisplayFor(model => model.Creator)
-                        @Html.DisplayFor(model => model.TimeCreated)
+                        @Convert.ToDateTime(Model.TimeCreated).ToString("dd:MM:yyyy HH':'mm")
                     </dd>
-                    <dd class="col-sm-10">
-                        @Html.DisplayFor(model => model.EditedBy)
-                        @Html.DisplayFor(model => model.EditDate)
-                    </dd>
+                    @if (Model.EditDate != null)
+                    {
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.EditedBy)
+                            @Convert.ToDateTime(Model.EditDate).ToString("dd:MM:yyyy HH':'mm")
+                        </dd>
+                    }
+                    <!---
                     <dt class="col-sm-10">
                         Due Date
                     </dt>
+                    
                     <dd class="col-sm-10">
-                        @Html.DisplayFor(model => model.DueDate)
+                        Html.DisplayFor(model => model.DueDate)
                     </dd>
+                    --->
                     @if (Model.Priority == "Closed")
                     {
                         <dt class="col-sm-10">
                             Closed
                         </dt>
                         <dd class="col-sm-10">
-                            @Html.DisplayFor(model => model.ClosedDate)
+                            @Convert.ToDateTime(Model.ClosedDate).ToString("dd:MM:yyyy HH':'mm")
                         </dd>
 
                         <dd class="col-sm-10">
