@@ -6,12 +6,14 @@
 <script language="javascript">
     function closedCheck(that) {
         if (that.value == "Closed") {
-            document.getElementById("ifYes").style.display = "block";
-            document.getElementById("ifYes2").style.display = "block";
+            document.getElementById("closedDate").style.display = "none";
+            document.getElementById("resolved").style.display = "block";
+            document.getElementById("closedBy").style.display = "none";
         }
         else {
-            document.getElementById("ifYes").style.display = "none";
-            document.getElementById("ifYes2").style.display = "none";
+            document.getElementById("closedDate").style.display = "none";
+            document.getElementById("resolved").style.display = "none";
+            document.getElementById("closedBy").style.display = "none";
         }
     }
 </script>
@@ -24,17 +26,13 @@
     <div class="col-md-4">
         @using (Html.BeginForm("Edit", "Bugs", FormMethod.Post))
         {    <form asp-action="Edit">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div asp-validation-summary="ModelOnly" class="text-danger">
+                </div>
                 <input type="hidden" asp-for="Id" />
-
                 <div class="form-group">
-                    <label class="control-label text-white">New Project</label>
-                    <input class="form-control" />
-                    <label class="control-label text-white">Select Project</label>
-                    @Html.DropDownListFor(model => model.Projects,
-                     new SelectList(ViewBag.Unique2Projects, "Value", "Text"), "New Project")
+                    <label class="control-label text-white">Project</label>
+                    <input asp-for="Projects" type="text" id="AddNew" class="form-control" style="display: block"/>
                     <span asp-validation-for="Projects" class="text-danger"></span>
-
                 </div>
                 <div class="form-group">
                     <label asp-for="Tickets" class="text-white"></label>
@@ -59,14 +57,35 @@
                     </select>
                     <span asp-validation-for="Priority" class="text-danger"></span>
                 </div>
-
-                <div id="ifYes" style="display: none;">
+                 <div style="display: none" class="form-group">                  
+                    <input asp-for="Creator" class="form-control" />                  
+                </div>
+                <div style="display: none" class="form-group">                  
+                    <input asp-for="TimeCreated" class="form-control" />                  
+                </div>
+                 <div style="display:none "class="form-group">                   
+                    <select id="select1" asp-for="EditDate">
+                        <option>@DateTime.Now</option>
+                    </select>
+                </div>
+                <div style="display:none" class="form-group">                   
+                    <select id="select2" asp-for="EditedBy">
+                        <option>@User.Identity.Name</option>
+                    </select>
+                </div>
+                <div id="closedDate" style="display: none;">
                     <label class="control-label text-white">Closed Date</label>
                     <select asp-for="ClosedDate">
                         <option>@DateTime.Now</option>
                     </select>
                 </div>
-                <div id="ifYes2" style="display: none;">
+                <div id="closedBy" style="display:none" class="form-group">
+                    <label class="control-label text-white">Closed By</label>
+                    <select id="select3" asp-for="ClosedBy">
+                        <option>@User.Identity.Name</option>
+                    </select>
+                </div>
+                <div id="resolved" style="display: none;">
                     <label class="text-white">Resolved Issue</label>
                     <textarea asp-for="Resolved" class="form-control" rows="5"></textarea>
                 </div>

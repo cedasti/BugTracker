@@ -40,7 +40,7 @@
                     </dt>
 
 
-                    {
+                    
                     <dd class="btn text-white @(Model.Priority == "Immediate" ? "red" :
                      Model.Priority == "Urgent" ? "chocolate" :
                      Model.Priority == "Medium" ? "gold" :
@@ -50,13 +50,15 @@
                         @Html.DisplayFor(model => model.Priority)
                     </dd>
                     <dt class="col-sm-10">
-                        Created
+                        Created/Edited
                     </dt>
                     <dd class="col-sm-10">
-                        @Html.DisplayFor(model => model.TimeCreated)
-                    </dd>                   
-                    <dd class="col-sm-10">
                         @Html.DisplayFor(model => model.Creator)
+                        @Html.DisplayFor(model => model.TimeCreated)
+                    </dd>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.EditedBy)
+                        @Html.DisplayFor(model => model.EditDate)
                     </dd>
                     <dt class="col-sm-10">
                         Due Date
@@ -67,10 +69,14 @@
                     @if (Model.Priority == "Closed")
                     {
                         <dt class="col-sm-10">
-                            Closed Date
+                            Closed
                         </dt>
                         <dd class="col-sm-10">
                             @Html.DisplayFor(model => model.ClosedDate)
+                        </dd>
+
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.ClosedBy)
                         </dd>
                         <dt class="col-sm-10">
                             Resolved Issue

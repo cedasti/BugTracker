@@ -30,12 +30,19 @@ namespace BugTracker.Models
 
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy HH:mm}")]
         public DateTime DueDate { get; set; }
-        public string ClosedDate { get; set; }
        
         public string Creator { get; set; }
-
-
+        
         public string TimeCreated { get; set; }
+        
+        public string EditedBy { get; set; }
+        
+        public string EditDate { get; set; }
+        
+        public string ClosedBy { get; set; }
+        
+        public string ClosedDate { get; set; }
+
 
         public Bugs()
         {

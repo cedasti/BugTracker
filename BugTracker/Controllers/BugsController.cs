@@ -211,12 +211,12 @@ namespace BugTracker.Controllers
                 amp = amp.Where(s => s.Projects.Trim().Equals(Selected1Projects.Trim()));
             }
 
-            var Unique1Projects = from s in amp
+            var Projects = from s in amp
                                  group s by s.Projects into newGroup
                                  where newGroup.Key != null
                                  orderby newGroup.Key
                                  select new { Projects = newGroup.Key };
-            ViewBag.Unique1Projects = Unique1Projects.Select(m => new SelectListItem { Value = m.Projects, Text = m.Projects }).ToList();
+            ViewBag.Projects = Projects.Select(m => new SelectListItem { Value = m.Projects, Text = m.Projects }).ToList();
             ViewBag.Selected1Projects = Selected1Projects;
                    
             return View();
@@ -228,7 +228,7 @@ namespace BugTracker.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Projects,Unique1Projects,Tickets,Description,Priority,DueDate,TimeCreated,ClosedDate,Resolved,Creator")] Bugs bugs)
+        public async Task<IActionResult> Create([Bind("Id,Projects,Tickets,Description,Priority,DueDate,TimeCreated,Creator")] Bugs bugs)
         {
 
             if (ModelState.IsValid)
@@ -282,7 +282,7 @@ namespace BugTracker.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Projects,Tickets,Description,Priority,DueDate,TimeCreated,ClosedDate,Resolved,Creator")] Bugs bugs)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Projects,Tickets,Description,Priority,DueDate,TimeCreated,Resolved,Creator,EditedBy,EditDate,ClosedBy,ClosedDate")] Bugs bugs)
         {
             if (id != bugs.Id)
             {

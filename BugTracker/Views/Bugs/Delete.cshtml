@@ -12,7 +12,13 @@
     <hr />
     <dl class="row text-white">
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Tickets)
+            Project
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Projects)
+        </dd>
+        <dt class="col-sm-2">
+            Ticket
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Tickets)
@@ -26,7 +32,13 @@
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Priority)
         </dt>
-        <dd class="col-sm-10">
+        <dd class="btn text-white 
+            @(Model.Priority == "Immediate" ? "red" :
+            Model.Priority == "Urgent" ? "chocolate" :
+            Model.Priority == "Medium" ? "gold" :
+            Model.Priority == "Low" ? "yellow" :
+            Model.Priority == "Very low" ? "olive" :
+            Model.Priority == "Closed" ? "green" : "")">
             @Html.DisplayFor(model => model.Priority)
         </dd>
     </dl>
