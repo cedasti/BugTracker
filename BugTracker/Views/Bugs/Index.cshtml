@@ -37,9 +37,14 @@
             max-width: 500px;
             overflow: hidden;
             text-overflow: ellipsis;
-            white-space: nowrap;
-            
-            
+            white-space: nowrap           
+        }
+
+        button-group {
+            margin: auto;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
         }
 
     </style>
@@ -61,7 +66,7 @@
         </thead>
         <tbody class="text-white">
             <tr class="bg-dark">
-                <th>
+                <th class="col-1">
                     @Html.ActionLink("Tickets", "Index", new
                     {
                         SortOrder = ViewBag.Tickets,
@@ -71,35 +76,35 @@
                    SelectedCreateClosedDate = ViewBag.SelectedCreateClosedDate,
                     })
                 </th>
-                <th class="col"style="width:30%">
+                <th class="d-none d-lg-block col"style="width:30%">
                     @Html.ActionLink("Description", "Index", new
-               {
+                    {
                    SortOrder = ViewBag.Description,
                    SelectedDescription = ViewBag.SelectecDescription,
                    SelectedTickets = ViewBag.SelectedTickets,
                    SelectedPriority = ViewBag.SelectedPriority,
                    SelectedCreateClosedDate = ViewBag.SelectedCreateClosedDate
-               })
+                    })
                 </th>
                 <th class="col-sm-1">
                     @Html.ActionLink("Priority", "Index", new
-               {
+                    {
                    SortOrder = ViewBag.Priority,
                    SelectedDescription = ViewBag.SelectecDescription,
                    SelectedTickets = ViewBag.SelectedTickets,
                    SelectedPriority = ViewBag.SelectedPriority,
                    SelectedCreateClosedDate = ViewBag.SelectedCreateClosedDate
-               })
+                    })
                 </th>
-                <th class="col-md-1">
+                <th  class="d-none d-lg-block col">
                     @Html.ActionLink("Created/Closed", "Index", new
-               {
+                    {
                    SortOrder = ViewBag.CreateClosedDate,
                    SelectedTickets = ViewBag.SelectedTickets,
                    SelectedDescription = ViewBag.SelectecDescription,
                    SelectedPriority = ViewBag.SelectedPriority,
                    SelectedCreateClosedDate = ViewBag.SelectedCreateClosedDate
-               })
+                    })
                 </th>
                 <th>
                 </th>
@@ -126,10 +131,10 @@
             @foreach (var item in Model)
             {
             <tr class="table-white">
-                <td class="overflow-ellipsis">
+                <td class="overflow-ellipsis col-1">
                     @Html.DisplayFor(modelItem => item.Tickets)
                 </td>
-                <td>
+                <td class="d-none d-lg-block">
                     @Html.Raw(item.Description)
                 </td>
                 <td>
@@ -144,18 +149,18 @@
                 </td>
                 @if (item.Priority == "Closed")
                 {
-                    <td>
+                    <td  class="d-none d-lg-block col">
                      @Convert.ToDateTime(item.ClosedDate).ToString("dd:MM:yyyy HH':'mm")
                     </td>
                 }
                 else
                 {
-                    <td>
+                    <td  class="d-none d-lg-block col">
                         @Convert.ToDateTime(item.TimeCreated).ToString("dd:MM:yyyy HH':'mm")
                     </td>
                 }
 
-                <td class="btn-group mx-2">
+                <td>
                     <a asp-controller="Bugs" asp-route-id="@item.Id" asp-action="Edit" class="btn btn-primary">
                         <i class="fas fa-edit"></i>
                     </a>

@@ -166,9 +166,12 @@ namespace BugTracker.Controllers
 
             if (!string.IsNullOrEmpty(SearchPhrase))
             {
-                search = search.Where(s => s.Tickets.Contains(SearchPhrase)
-                                         || s.Description.Contains(SearchPhrase)
-                                         || s.Priority.Contains(SearchPhrase));
+                search = search.Where(a => a.Tickets.Contains(SearchPhrase)
+                                         || a.Description.Contains(SearchPhrase)
+                                         || a.Projects.Contains(SearchPhrase)
+                                         || a.TimeCreated.Contains(SearchPhrase)
+                                         || a.Creator.Contains(SearchPhrase)
+                                         || a.Priority.Contains(SearchPhrase));
             }
               
            
