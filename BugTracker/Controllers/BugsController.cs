@@ -25,6 +25,8 @@ namespace BugTracker.Controllers
         public async Task<IActionResult> Index(string SelectedProjects, string SortOrder, string SelectedTickets, string SelectedDescription, string SelectedPriority, string SelectedCreateClosedDate)
 
         {
+            //Sorting and DropDownList
+
             ViewBag.Projects = String.IsNullOrEmpty(SortOrder) ? "Projects_desc" : "";
             ViewBag.Tickets = SortOrder == "Tickets" ? "Tickets_desc" : "Tickets";
             ViewBag.Description = SortOrder == "Description" ? "Description_desc" : "Description";
@@ -247,6 +249,7 @@ namespace BugTracker.Controllers
         [Authorize]
         public async Task<IActionResult> Edit(string Selected2Projects, int? id)
         {
+            //Choose a Project
 
             var rawData = (from s in _context.Bugs
                            select s).ToList();

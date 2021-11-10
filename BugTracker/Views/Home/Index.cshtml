@@ -1,7 +1,93 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+ <link rel="stylesheet" href="~/css/site.css" />
+<script src="/js/exporting.js"></script>
+<script src="/js/highcharts.js"></script>
+<script src="/js/export-data.js"></script>
+<script src="/js/accessibility.js"></script>
 
-<div class="text-center">
-    <h1 class="display-4 text-white">Bug Tracking Application</h1>
-</div>
+
+
+<h1 style="text-align:center;">Welcome</h1>
+<p style="text-align:center;">Here is an overview of your bug situation.</p>
+
+<figure class="highcharts-figure">
+    <div id="container"></div>
+</figure>
+
+<script>
+
+        $(document).ready(function(){
+            $.getJSON("/Home/GetData", function(data){
+          
+              Highcharts.chart('container', {
+                chart: {
+                    plotBackgroundColor: '#212121',
+                    plotBorderColor: '#212121',
+                    plotBorderWidth: null,
+                    plotShadow: false,
+                    type: 'pie'
+                },
+ 
+                title: {
+                    text: ''
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                },
+                accessibility: {
+                    point: {
+                        valueSuffix: '%'
+                    }
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                        }
+                    }
+                    
+                },
+                series: [{
+                    name: 'Bugs',
+                    colorByPoint: false,
+                    data: [{
+                        name: 'Closed',
+                        y: data.closed,
+                        color: 'green',
+                        sliced: true,
+                        selected: true
+                        
+                    }, {
+                        name: 'Immediate',
+                        y: data.immediate,
+                        color: 'red'
+                    }, {
+                        name: 'Urgent',
+                        y: data.urgent,
+                        color: 'chocolate'
+                    }, {
+                        name: 'Medium',
+                        y: data.medium,
+                        color: 'gold'
+                    }, {
+                        name: 'Low',
+                        y: data.low,
+                        color: 'yellow'
+                    }, {
+                        name: 'Very low',
+                        y: data.verylow,
+                        color: 'olive'
+                    }]
+                  }]
+                });
+              });
+            });
+    
+  
+
+</script>
